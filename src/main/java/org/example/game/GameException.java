@@ -1,6 +1,8 @@
 package org.example.game;
 
-public class GameException extends RuntimeException {
+import org.example.boardGame.BoardException;
+
+public class GameException extends BoardException {
     public GameException(String message) {
         super(message);
     }

@@ -22,6 +22,8 @@ public class Board {
         return columns;
     }
 
+    // The 2 methods below return the piece that is in a certain position on the board
+
     public Piece piece(int row, int column) {
         if(!positionExists(row, column)) {
             throw new BoardException("Position not on the board");
@@ -42,6 +44,19 @@ public class Board {
         }
         pieces[position.getRow()][position.getColumn()] = piece;
         piece.position = position;
+    }
+
+    public Piece removePiece(Position position){
+        if(!positionExists(position)){
+            throw new BoardException("Position not on the board");
+        }
+        if(piece(position) == null){
+            return null;
+        }
+        Piece pieceToBeRemoved = piece(position);
+        pieceToBeRemoved.position = null;
+        pieces[position.getRow()][position.getColumn()] = null;
+        return pieceToBeRemoved;
     }
 
     private boolean positionExists(int row, int column) {

@@ -1,7 +1,11 @@
 package org.example.application;
 
 import org.example.game.Color;
+import org.example.game.GamePosition;
 import org.example.game.GameTankPiece;
+
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class UI {
 
@@ -26,6 +30,17 @@ public class UI {
     public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
     public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
+
+    public static GamePosition readGamePosition(Scanner scanner){
+        try {
+            String input = scanner.nextLine();
+            char column = input.charAt(0);
+            int row = Integer.parseInt(input.substring(1));
+            return new GamePosition(column, row);
+        }catch (RuntimeException e){
+            throw new InputMismatchException("Error reading GamePosition. Valid values are from a1 to i9.");
+        }
+    }
 
     public static void printBoard(GameTankPiece[][] pieces) {
         for(int i = 0; i < pieces.length; i++) {
