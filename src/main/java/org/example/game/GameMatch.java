@@ -1,7 +1,6 @@
 package org.example.game;
 
 import org.example.boardGame.Board;
-import org.example.boardGame.Position;
 
 public class GameMatch {
     private Board board;
@@ -21,13 +20,17 @@ public class GameMatch {
         return mat;
     }
 
-    private void initialSetup(){
-        board.placePiece(new TankPiece(board, Color.RED), new Position(8, 1));
-        board.placePiece(new TankPiece(board, Color.RED), new Position(8, 4));
-        board.placePiece(new TankPiece(board, Color.RED), new Position(8, 7));
+    private void placeNewPiece(char column, int row, GameTankPiece piece) {
+        board.placePiece(piece, new GamePosition(column, row).toPosition());
+    }
 
-        board.placePiece(new TankPiece(board, Color.BLUE), new Position(0, 1));
-        board.placePiece(new TankPiece(board, Color.BLUE), new Position(0, 4));
-        board.placePiece(new TankPiece(board, Color.BLUE), new Position(0, 7));
+    private void initialSetup(){
+        placeNewPiece('c', 1, new TankPiece(board, Color.RED));
+        placeNewPiece('e', 1, new TankPiece(board, Color.RED));
+        placeNewPiece('g', 1, new TankPiece(board, Color.RED));
+
+        placeNewPiece('c', 9, new TankPiece(board, Color.BLUE));
+        placeNewPiece('e', 9, new TankPiece(board, Color.BLUE));
+        placeNewPiece('g', 9, new TankPiece(board, Color.BLUE));
     }
 }
