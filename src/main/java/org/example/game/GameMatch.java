@@ -1,6 +1,8 @@
 package org.example.game;
 
 import org.example.boardGame.Board;
+import org.example.boardGame.Piece;
+import org.example.boardGame.Position;
 
 public class GameMatch {
     private Board board;
@@ -18,6 +20,29 @@ public class GameMatch {
             }
         }
         return mat;
+    }
+
+    public GameTankPiece performGameMove(GamePosition sourcePosition, GamePosition targetPosition) {
+        Position source = sourcePosition.toPosition();
+        Position target = targetPosition.toPosition();
+        validateSourcePosition(source);
+        Piece capturedPiece = makeMove(source, target);
+
+        return (GameTankPiece) capturedPiece;
+    }
+
+    private Piece makeMove(Position source, Position target) {
+        Piece p = board.removePiece(source);
+        Piece capturedPiece = board.removePiece(target);
+        board.placePiece(p, target);
+
+        return capturedPiece;
+    }
+
+    public void validateSourcePosition(Position position) {
+        if(!board.thereIsAPiece(position)) {
+            throw new GameException("There is no piece on source position");
+        }
     }
 
     private void placeNewPiece(char column, int row, GameTankPiece piece) {
