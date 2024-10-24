@@ -3,6 +3,9 @@ package org.example.game;
 import org.example.boardGame.Board;
 import org.example.boardGame.Piece;
 import org.example.boardGame.Position;
+import org.example.game.pieces.BombPiece;
+import org.example.game.pieces.HeavyPiece;
+import org.example.game.pieces.LongReachPiece;
 
 public class GameMatch {
     private Board board;
@@ -43,6 +46,9 @@ public class GameMatch {
         if(!board.thereIsAPiece(position)) {
             throw new GameException("There is no piece on source position");
         }
+        if(!board.piece(position).isThereAnyPossibleMove()){
+            throw new GameException("There is no possible moves for the chosen piece");
+        }
     }
 
     private void placeNewPiece(char column, int row, GameTankPiece piece) {
@@ -50,12 +56,12 @@ public class GameMatch {
     }
 
     private void initialSetup(){
-        placeNewPiece('c', 1, new TankPiece(board, Color.RED));
-        placeNewPiece('e', 1, new TankPiece(board, Color.RED));
-        placeNewPiece('g', 1, new TankPiece(board, Color.RED));
+        placeNewPiece('c', 1, new BombPiece(board, Color.RED));
+        placeNewPiece('e', 1, new HeavyPiece(board, Color.RED));
+        placeNewPiece('g', 1, new LongReachPiece(board, Color.RED));
 
-        placeNewPiece('c', 9, new TankPiece(board, Color.BLUE));
-        placeNewPiece('e', 9, new TankPiece(board, Color.BLUE));
-        placeNewPiece('g', 9, new TankPiece(board, Color.BLUE));
+        placeNewPiece('c', 9, new BombPiece(board, Color.BLUE));
+        placeNewPiece('e', 9, new HeavyPiece(board, Color.BLUE));
+        placeNewPiece('g', 9, new LongReachPiece(board, Color.BLUE));
     }
 }
