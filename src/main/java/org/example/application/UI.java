@@ -52,13 +52,18 @@ public class UI {
 
     public static void printBoard(GameTankPiece[][] pieces) {
         for(int i = 0; i < pieces.length; i++) {
-            System.out.print((9 - i) + " ");
+            if(i >= 6){
+                System.out.print("0" + (15 - i) + " ");
+            }else{
+                System.out.print((15 - i) + " ");
+            }
+
             for(int j = 0; j < pieces.length; j++) {
                 printPiece(pieces[i][j]);
             }
             System.out.println();
         }
-        System.out.println("  a b c d e f g h i");
+        System.out.println("   a b c d e f g h i j k l m n o");
     }
 
     public static void printPiece(GameTankPiece piece) {

@@ -11,7 +11,7 @@ public class GameMatch {
     private Board board;
 
     public GameMatch() {
-        board = new Board(9, 9);
+        board = new Board(15, 15);
         initialSetup();
     }
 
@@ -29,6 +29,7 @@ public class GameMatch {
         Position source = sourcePosition.toPosition();
         Position target = targetPosition.toPosition();
         validateSourcePosition(source);
+        validateTargetPosition(source, target);
         Piece capturedPiece = makeMove(source, target);
 
         return (GameTankPiece) capturedPiece;
@@ -42,7 +43,7 @@ public class GameMatch {
         return capturedPiece;
     }
 
-    public void validateSourcePosition(Position position) {
+    private void validateSourcePosition(Position position) {
         if(!board.thereIsAPiece(position)) {
             throw new GameException("There is no piece on source position");
         }
@@ -51,17 +52,23 @@ public class GameMatch {
         }
     }
 
+    private void validateTargetPosition(Position source, Position target) {
+        if(!board.piece(source).possibleMove(target)) {
+            throw new GameException("The chosen piece can't move to target position");
+        }
+    }
+
     private void placeNewPiece(char column, int row, GameTankPiece piece) {
         board.placePiece(piece, new GamePosition(column, row).toPosition());
     }
 
     private void initialSetup(){
-        placeNewPiece('c', 1, new BombPiece(board, Color.RED));
-        placeNewPiece('e', 1, new HeavyPiece(board, Color.RED));
-        placeNewPiece('g', 1, new LongReachPiece(board, Color.RED));
+        placeNewPiece('d', 1, new BombPiece(board, Color.RED));
+        placeNewPiece('h', 1, new HeavyPiece(board, Color.RED));
+        placeNewPiece('l', 1, new LongReachPiece(board, Color.RED));
 
-        placeNewPiece('c', 9, new BombPiece(board, Color.BLUE));
-        placeNewPiece('e', 9, new HeavyPiece(board, Color.BLUE));
-        placeNewPiece('g', 9, new LongReachPiece(board, Color.BLUE));
+        placeNewPiece('d', 15, new BombPiece(board, Color.BLUE));
+        placeNewPiece('h', 15, new HeavyPiece(board, Color.BLUE));
+        placeNewPiece('l', 15, new LongReachPiece(board, Color.BLUE));
     }
 }
