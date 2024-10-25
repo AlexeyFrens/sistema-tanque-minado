@@ -33,7 +33,7 @@ public class Main {
                 System.out.print("Target: ");
                 GamePosition target = UI.readGamePosition(scanner);
 
-                GameTankPiece capturedPiece = match.performGameMove(source, target);
+                match.performGameMove(source, target);
             }catch (GameException | InputMismatchException e){
                 System.out.println(e.getMessage());
                 System.out.println("\npress enter to continue");

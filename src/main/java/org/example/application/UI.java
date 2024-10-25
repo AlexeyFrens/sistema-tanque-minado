@@ -5,7 +5,9 @@ import org.example.game.GameMatch;
 import org.example.game.GamePosition;
 import org.example.game.GameTankPiece;
 
+import java.util.Arrays;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class UI {
@@ -104,5 +106,22 @@ public class UI {
             }
         }
         System.out.print(" ");
+    }
+
+    private static void printAttackedPieces(List<GameTankPiece> attacked){
+        List<GameTankPiece> red = attacked.stream().filter(x -> x.getColor() == Color.RED).toList();
+        List<GameTankPiece> blue = attacked.stream().filter(x -> x.getColor() == Color.BLUE).toList();
+
+        System.out.println("Attacked Pieces:");
+        System.out.print("Red: ");
+        System.out.print(ANSI_RED);
+        System.out.println(Arrays.toString(red.toArray()));
+        System.out.print(ANSI_RESET);
+
+        System.out.print("Blue: ");
+        System.out.print(ANSI_BLUE);
+        System.out.println(Arrays.toString(blue.toArray()));
+        System.out.print(ANSI_RESET);
+
     }
 }

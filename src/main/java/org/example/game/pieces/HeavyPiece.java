@@ -13,6 +13,10 @@ public class HeavyPiece extends GameTankPiece {
         super(board, color);
     }
 
+    public int getMovementLimit() {
+        return movementLimit;
+    }
+
     @Override
     public String toString() {
         return "H";

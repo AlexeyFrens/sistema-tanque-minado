@@ -44,26 +44,20 @@ public class GameMatch {
         return board.piece(position).possibleMoves();
     }
 
-    public GameTankPiece performGameMove(GamePosition sourcePosition, GamePosition targetPosition) {
+    public void performGameMove(GamePosition sourcePosition, GamePosition targetPosition) {
         Position source = sourcePosition.toPosition();
         Position target = targetPosition.toPosition();
 
         validateSourcePosition(source);
         validateTargetPosition(source, target);
-
-        Piece attackedPiece = makeMove(source, target);
+        makeMove(source, target);
 
         nextTurn();
-
-        return (GameTankPiece) attackedPiece;
     }
 
-    private Piece makeMove(Position source, Position target) {
+    private void makeMove(Position source, Position target) {
         Piece p = board.removePiece(source);
-        Piece attackedPiece = board.removePiece(target);
         board.placePiece(p, target);
-
-        return attackedPiece;
     }
 
     private void validateSourcePosition(Position position) {
