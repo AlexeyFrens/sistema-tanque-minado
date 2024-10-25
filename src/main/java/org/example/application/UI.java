@@ -1,6 +1,7 @@
 package org.example.application;
 
 import org.example.game.Color;
+import org.example.game.GameMatch;
 import org.example.game.GamePosition;
 import org.example.game.GameTankPiece;
 
@@ -48,6 +49,13 @@ public class UI {
         }catch (RuntimeException e){
             throw new InputMismatchException("Error reading GamePosition. Valid values are from a1 to i9.");
         }
+    }
+
+    public static void printMatch(GameMatch match){
+        printBoard(match.getPieces());
+        System.out.println();
+        System.out.println("Turn: " + match.getTurn());
+        System.out.println("Waiting player: " + match.getCurrentPlayer());
     }
 
     public static void printBoard(GameTankPiece[][] pieces) {

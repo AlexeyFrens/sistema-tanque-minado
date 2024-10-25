@@ -8,11 +8,24 @@ import org.example.game.pieces.HeavyPiece;
 import org.example.game.pieces.LongReachPiece;
 
 public class GameMatch {
+
+    private int turn;
+    private Color currentPlayer;
     private Board board;
 
     public GameMatch() {
         board = new Board(15, 15);
+        turn = 1;
+        currentPlayer = Color.RED;
         initialSetup();
+    }
+
+    public int getTurn() {
+        return turn;
+    }
+
+    public Color getCurrentPlayer() {
+        return currentPlayer;
     }
 
     public GameTankPiece[][] getPieces() {
@@ -34,24 +47,31 @@ public class GameMatch {
     public GameTankPiece performGameMove(GamePosition sourcePosition, GamePosition targetPosition) {
         Position source = sourcePosition.toPosition();
         Position target = targetPosition.toPosition();
+
         validateSourcePosition(source);
         validateTargetPosition(source, target);
-        Piece capturedPiece = makeMove(source, target);
 
-        return (GameTankPiece) capturedPiece;
+        Piece attackedPiece = makeMove(source, target);
+
+        nextTurn();
+
+        return (GameTankPiece) attackedPiece;
     }
 
     private Piece makeMove(Position source, Position target) {
         Piece p = board.removePiece(source);
-        Piece capturedPiece = board.removePiece(target);
+        Piece attackedPiece = board.removePiece(target);
         board.placePiece(p, target);
 
-        return capturedPiece;
+        return attackedPiece;
     }
 
     private void validateSourcePosition(Position position) {
         if(!board.thereIsAPiece(position)) {
             throw new GameException("There is no piece on source position");
+        }
+        if(currentPlayer != ((GameTankPiece) board.piece(position)).getColor()) {
+            throw new GameException("The chosen piece is not yours");
         }
         if(!board.piece(position).isThereAnyPossibleMove()){
             throw new GameException("There is no possible moves for the chosen piece");
@@ -62,6 +82,13 @@ public class GameMatch {
         if(!board.piece(source).possibleMove(target)) {
             throw new GameException("The chosen piece can't move to target position");
         }
+    }
+
+    private void nextTurn(){
+        turn++;
+
+        // if the current player is red then the color will be blue, else the color will be red
+        currentPlayer = (currentPlayer == Color.RED) ? Color.BLUE : Color.RED;
     }
 
     private void placeNewPiece(char column, int row, GameTankPiece piece) {
