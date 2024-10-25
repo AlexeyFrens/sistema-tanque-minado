@@ -25,6 +25,10 @@ public class Main {
                 System.out.print("Source: ");
                 GamePosition source = UI.readGamePosition(scanner);
 
+                boolean[][] possibleMoves = match.possibleMoves(source);
+                UI.clearScreen();
+                UI.printBoard(match.getPieces(), possibleMoves);
+
                 System.out.println();
                 System.out.print("Target: ");
                 GamePosition target = UI.readGamePosition(scanner);

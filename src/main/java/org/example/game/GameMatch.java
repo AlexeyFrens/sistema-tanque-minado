@@ -25,6 +25,12 @@ public class GameMatch {
         return mat;
     }
 
+    public boolean[][] possibleMoves(GamePosition sourcePosition){
+        Position position = sourcePosition.toPosition();
+        validateSourcePosition(position);
+        return board.piece(position).possibleMoves();
+    }
+
     public GameTankPiece performGameMove(GamePosition sourcePosition, GamePosition targetPosition) {
         Position source = sourcePosition.toPosition();
         Position target = targetPosition.toPosition();
