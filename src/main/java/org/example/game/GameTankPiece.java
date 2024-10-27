@@ -6,6 +6,13 @@ import org.example.boardGame.Position;
 
 public abstract class GameTankPiece extends Piece {
     private Color color;
+    protected int life;
+
+    protected int movementLimit;
+
+    protected int reach;
+    protected int reloadTime;
+    protected int damage;
 
     public GameTankPiece(Board board, Color color) {
         super(board);
