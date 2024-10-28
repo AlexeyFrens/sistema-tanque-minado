@@ -1,11 +1,10 @@
 package org.example.application;
 
-import org.example.game.GameException;
-import org.example.game.GameMatch;
-import org.example.game.GamePosition;
-import org.example.game.GameTankPiece;
+import org.example.game.*;
 
+import javax.swing.text.html.Option;
 import java.util.InputMismatchException;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Main {
@@ -16,7 +15,7 @@ public class Main {
         GameMatch match = new GameMatch();
 
         // for now, it will stay true until the game logic is done
-        while(true){
+        while (true) {
 
             try {
                 UI.clearScreen();
@@ -37,25 +36,40 @@ public class Main {
 
                 match.performGameMove(source, target);
 
-                if(!match.isThereAnyPossibleShot()){
+                if (!match.isThereAnyPossibleShot()) {
                     System.out.println("No available shots for this turn. Moving to the next player's turn...");
                     System.out.println("\nPress enter to continue");
                     scanner.nextLine();
                     match.nextTurn();
-                }else{
-                    UI.clearScreen();
-                    UI.printMatch(match);
-                    System.out.println("\nAttack Round\n");
-                    System.out.print("Source attack: ");
-                    GamePosition sourceAttack = UI.readGamePosition(scanner);
+                } else {
 
-                    System.out.print("\nTarget attack: ");
-                    GamePosition targetAttack = UI.readGamePosition(scanner);
+                    while (true) {
+                        try {
+                            UI.clearScreen();
+                            UI.printMatch(match);
+                            System.out.println("\nAttack Round\n");
+                            System.out.print("Source attack: ");
+                            GamePosition sourceAttack = UI.readGamePosition(scanner);
 
-                    match.performGameShot(sourceAttack, targetAttack);
+                            boolean[][] possibleShots = match.possibleShots(sourceAttack);
+
+                            UI.clearScreen();
+                            UI.printBoard(match.getPieces(), possibleShots);
+
+                            System.out.print("\nTarget attack: ");
+                            GamePosition targetAttack = UI.readGamePosition(scanner);
+
+                            Optional<GameTankPiece> piece = match.performGameShot(sourceAttack, targetAttack);
+                            break;
+                        } catch (ShotException e){
+                            System.out.println(e.getMessage());
+                            System.out.println("\nPress enter to continue");
+                            scanner.nextLine();
+                        }
+                    }
                 }
 
-            }catch (GameException | InputMismatchException e){
+            } catch (GameException | InputMismatchException e) {
                 System.out.println(e.getMessage());
                 System.out.println("\npress enter to continue");
                 scanner.nextLine();

@@ -7,6 +7,8 @@ import org.example.game.pieces.BombPiece;
 import org.example.game.pieces.HeavyPiece;
 import org.example.game.pieces.LongReachPiece;
 
+import java.util.Optional;
+
 public class GameMatch {
 
     private int turn;
@@ -30,23 +32,23 @@ public class GameMatch {
 
     public GameTankPiece[][] getPieces() {
         GameTankPiece[][] mat = new GameTankPiece[board.getRows()][board.getColumns()];
-        for(int i = 0; i < board.getRows(); i++) {
-            for(int j = 0; j < board.getColumns(); j++) {
+        for (int i = 0; i < board.getRows(); i++) {
+            for (int j = 0; j < board.getColumns(); j++) {
                 mat[i][j] = (GameTankPiece) board.piece(i, j);
             }
         }
         return mat;
     }
 
-    private GameTankPiece[][] getBluePieces(){
+    private GameTankPiece[][] getBluePieces() {
         GameTankPiece[][] mat = new GameTankPiece[board.getRows()][board.getColumns()];
         GameTankPiece piece;
 
-        for(int i = 0; i < board.getRows(); i++) {
-            for(int j = 0; j < board.getColumns(); j++) {
+        for (int i = 0; i < board.getRows(); i++) {
+            for (int j = 0; j < board.getColumns(); j++) {
                 piece = (GameTankPiece) board.piece(i, j);
 
-                if(piece != null && piece.getColor() == Color.BLUE) {
+                if (piece != null && piece.getColor() == Color.BLUE) {
                     mat[i][j] = piece;
                 }
             }
@@ -55,15 +57,15 @@ public class GameMatch {
         return mat;
     }
 
-    private GameTankPiece[][] getRedPieces(){
+    private GameTankPiece[][] getRedPieces() {
         GameTankPiece[][] mat = new GameTankPiece[board.getRows()][board.getColumns()];
         GameTankPiece piece;
 
-        for(int i = 0; i < board.getRows(); i++) {
-            for(int j = 0; j < board.getColumns(); j++) {
+        for (int i = 0; i < board.getRows(); i++) {
+            for (int j = 0; j < board.getColumns(); j++) {
                 piece = (GameTankPiece) board.piece(i, j);
 
-                if(piece != null && piece.getColor() == Color.RED) {
+                if (piece != null && piece.getColor() == Color.RED) {
                     mat[i][j] = piece;
                 }
             }
@@ -72,16 +74,20 @@ public class GameMatch {
         return mat;
     }
 
-    public boolean[][] possibleMoves(GamePosition sourcePosition){
+    public boolean[][] possibleMoves(GamePosition sourcePosition) {
         Position position = sourcePosition.toPosition();
         validateSourcePosition(position);
         return board.piece(position).possibleMoves();
     }
 
-    public boolean[][] possibleShots(GamePosition sourcePosition){
-        Position position = sourcePosition.toPosition();
-        validateSourcePositionToShot(position);
-        return board.piece(position).possibleShots();
+    public boolean[][] possibleShots(GamePosition sourcePosition) {
+        try {
+            Position position = sourcePosition.toPosition();
+            validateSourcePositionToShot(position);
+            return board.piece(position).possibleShots();
+        } catch (Exception e) {
+            throw new ShotException(e.getMessage());
+        }
     }
 
     public void performGameMove(GamePosition sourcePosition, GamePosition targetPosition) {
@@ -98,17 +104,21 @@ public class GameMatch {
         board.placePiece(p, target);
     }
 
-    public GameTankPiece performGameShot(GamePosition sourcePosition, GamePosition targetPosition) {
-        Position source = sourcePosition.toPosition();
-        Position target = targetPosition.toPosition();
+    public Optional<GameTankPiece> performGameShot(GamePosition sourcePosition, GamePosition targetPosition) {
+        try {
+            Position source = sourcePosition.toPosition();
+            Position target = targetPosition.toPosition();
 
-        validateSourcePositionToShot(source);
-        validateTargetPositionToShot(source, target);
-        Piece attackedPiece = shoot(target);
+            validateSourcePositionToShot(source);
+            validateTargetPositionToShot(source, target);
+            Piece attackedPiece = shoot(target);
 
-        nextTurn();
+            nextTurn();
 
-        return (GameTankPiece) attackedPiece;
+            return Optional.of((GameTankPiece) attackedPiece);
+        } catch (Exception e) {
+            throw new ShotException(e.getMessage());
+        }
     }
 
     private Piece shoot(Position target) {
@@ -116,37 +126,37 @@ public class GameMatch {
     }
 
     private void validateSourcePosition(Position position) {
-        if(!board.thereIsAPiece(position)) {
+        if (!board.thereIsAPiece(position)) {
             throw new GameException("There is no piece on source position");
         }
-        if(currentPlayer != ((GameTankPiece) board.piece(position)).getColor()) {
+        if (currentPlayer != ((GameTankPiece) board.piece(position)).getColor()) {
             throw new GameException("The chosen piece is not yours");
         }
-        if(!board.piece(position).isThereAnyPossibleMove()){
+        if (!board.piece(position).isThereAnyPossibleMove()) {
             throw new GameException("There is no possible moves for the chosen piece");
         }
     }
 
     private void validateSourcePositionToShot(Position position) {
-        if(!board.thereIsAPiece(position)) {
+        if (!board.thereIsAPiece(position)) {
             throw new GameException("There is no piece on source position");
         }
-        if(currentPlayer != ((GameTankPiece) board.piece(position)).getColor()) {
+        if (currentPlayer != ((GameTankPiece) board.piece(position)).getColor()) {
             throw new GameException("The chosen piece is not yours");
         }
-        if(!board.piece(position).isThereAnyPossibleShot()){
+        if (!board.piece(position).isThereAnyPossibleShot()) {
             throw new GameException("There is no opponent to attack");
         }
     }
 
     private void validateTargetPosition(Position source, Position target) {
-        if(!board.piece(source).possibleMove(target)) {
+        if (!board.piece(source).possibleMove(target)) {
             throw new GameException("The chosen piece can't move to target position");
         }
     }
 
     private void validateTargetPositionToShot(Position source, Position target) {
-        if(!board.piece(source).possibleShot(target)) {
+        if (!board.piece(source).possibleShot(target)) {
             throw new GameException("The chosen piece can't shoot to target position");
         }
     }
@@ -155,10 +165,10 @@ public class GameMatch {
         GameTankPiece[][] pieces = (currentPlayer == Color.RED) ? getRedPieces() : getBluePieces();
         GameTankPiece piece;
 
-        for(int i = 0; i < pieces.length; i++){
-            for(int j = 0; j < pieces[i].length; j++){
+        for (int i = 0; i < pieces.length; i++) {
+            for (int j = 0; j < pieces[i].length; j++) {
                 piece = pieces[i][j];
-                if(piece != null && piece.isThereAnyPossibleShot()){
+                if (piece != null && piece.isThereAnyPossibleShot()) {
                     return true;
                 }
             }
@@ -166,7 +176,7 @@ public class GameMatch {
         return false;
     }
 
-    public void nextTurn(){
+    public void nextTurn() {
         turn++;
 
         // if the current player is red then the color will be blue, else the color will be red
@@ -177,7 +187,7 @@ public class GameMatch {
         board.placePiece(piece, new GamePosition(column, row).toPosition());
     }
 
-    private void initialSetup(){
+    private void initialSetup() {
         placeNewPiece('d', 1, new BombPiece(board, Color.RED));
         placeNewPiece('h', 1, new HeavyPiece(board, Color.RED));
         placeNewPiece('l', 1, new LongReachPiece(board, Color.RED));

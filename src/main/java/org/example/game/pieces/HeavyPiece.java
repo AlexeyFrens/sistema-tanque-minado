@@ -125,56 +125,6 @@ public class HeavyPiece extends GameTankPiece {
             matrix[p.getRow()][p.getColumn()] = true;
         }
 
-        // nw
-        p.setValues(position.getRow() - 1, position.getColumn() - 1);
-        while (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p) && n <= reach) {
-            matrix[p.getRow()][p.getColumn()] = false;
-            p.setValues(p.getRow() - 1, p.getColumn() - 1);
-            n++;
-        }
-        if(getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-            matrix[p.getRow()][p.getColumn()] = true;
-        }
-
-        n = 1;
-
-        // ne
-        p.setValues(position.getRow() - 1, position.getColumn() + 1);
-        while (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p) && n <= reach) {
-            matrix[p.getRow()][p.getColumn()] = false;
-            p.setValues(p.getRow() - 1, p.getColumn() + 1);
-            n++;
-        }
-        if(getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-            matrix[p.getRow()][p.getColumn()] = true;
-        }
-
-        n = 1;
-
-        // se
-        p.setValues(position.getRow() + 1, position.getColumn() + 1);
-        while (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p) && n <= reach) {
-            matrix[p.getRow()][p.getColumn()] = false;
-            p.setValues(p.getRow() + 1, p.getColumn() + 1);
-            n++;
-        }
-        if(getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-            matrix[p.getRow()][p.getColumn()] = true;
-        }
-
-        n = 1;
-
-        // sw
-        p.setValues(position.getRow() + 1, position.getColumn() - 1);
-        while (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p) && n <= reach) {
-            matrix[p.getRow()][p.getColumn()] = false;
-            p.setValues(p.getRow() + 1, p.getColumn() - 1);
-            n++;
-        }
-        if(getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-            matrix[p.getRow()][p.getColumn()] = true;
-        }
-
         return matrix;
     }
 }

@@ -24,6 +24,9 @@ public abstract class GameTankPiece extends Piece {
     }
 
     protected boolean isThereOpponentPiece(Position position){
+        if(!getBoard().positionExists(position)){
+            return false;
+        }
         GameTankPiece piece = (GameTankPiece) getBoard().piece(position);
         return piece != null && piece.getColor() != color;
     }

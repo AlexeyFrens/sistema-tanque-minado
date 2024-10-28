@@ -76,7 +76,7 @@ public class UI {
         System.out.println("   a b c d e f g h i j k l m n o");
     }
 
-    public static void printBoard(GameTankPiece[][] pieces, boolean[][] possibleMoves) {
+    public static void printBoard(GameTankPiece[][] pieces, boolean[][] possibilities) {
         for(int i = 0; i < pieces.length; i++) {
             if(i >= 6){
                 System.out.print("0" + (15 - i) + " ");
@@ -85,7 +85,7 @@ public class UI {
             }
 
             for(int j = 0; j < pieces.length; j++) {
-                printPiece(pieces[i][j], possibleMoves[i][j]);
+                printPiece(pieces[i][j], possibilities[i][j]);
             }
             System.out.println();
         }
@@ -94,7 +94,7 @@ public class UI {
 
     public static void printPiece(GameTankPiece piece, boolean background) {
         if(background){
-            System.out.print(ANSI_YELLOW_BACKGROUND);
+            System.out.print(ANSI_CYAN_BACKGROUND);
         }
         if(piece == null) {
             System.out.print("-" + ANSI_RESET);
