@@ -15,8 +15,7 @@ public class Main {
 
         List<GameTankPiece> attacked = new ArrayList<>();
 
-        // for now, it will stay true until the game logic is done
-        while (true) {
+        while (match.isNotGameOver()) {
 
             try {
                 UI.clearScreen();
@@ -46,21 +45,16 @@ public class Main {
 
                     while (true) {
                         try {
-                            UI.clearScreen();
-                            UI.printMatch(match, attacked);
-                            System.out.println("\nAttack Round\n");
-                            System.out.print("Source attack: ");
-                            GamePosition sourceAttack = UI.readGamePosition(scanner);
+                            boolean[][] possibleShots = match.possibleShots(target);
 
-                            boolean[][] possibleShots = match.possibleShots(sourceAttack);
-
-                            UI.clearScreen();
                             UI.printBoard(match.getPieces(), possibleShots);
+
+                            System.out.println("\nAttack Round");
 
                             System.out.print("\nTarget attack: ");
                             GamePosition targetAttack = UI.readGamePosition(scanner);
 
-                            GameTankPiece attackedPiece = match.performGameShot(sourceAttack, targetAttack);
+                            GameTankPiece attackedPiece = match.performGameShot(target, targetAttack);
 
                             if(attackedPiece != null){
                                 attacked.add(attackedPiece);
@@ -81,5 +75,7 @@ public class Main {
                 scanner.nextLine();
             }
         }
+        UI.clearScreen();
+        UI.printMatch(match, attacked);
     }
 }

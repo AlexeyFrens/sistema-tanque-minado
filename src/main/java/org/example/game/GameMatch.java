@@ -9,7 +9,7 @@ import org.example.game.pieces.BombPiece;
 import org.example.game.pieces.HeavyPiece;
 import org.example.game.pieces.LongReachPiece;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameMatch {
@@ -17,6 +17,8 @@ public class GameMatch {
     private int turn;
     private Color currentPlayer;
     private Board board;
+
+    private List<GameTankPiece> piecesOnTheBoard = new ArrayList<>();
 
     public GameMatch() {
         board = new Board(15, 15);
@@ -116,7 +118,9 @@ public class GameMatch {
             validateTargetPositionToShot(source, target);
             Piece attackedPiece = shoot(target);
 
-            nextTurn();
+            if(isNotGameOver()){
+                nextTurn();
+            }
 
             return (GameTankPiece) attackedPiece;
         } catch (Exception e) {
@@ -125,7 +129,13 @@ public class GameMatch {
     }
 
     private Piece shoot(Position target) {
-        return board.removePiece(target);
+        Piece attackedPiece = board.removePiece(target);
+
+        if(attackedPiece != null){
+            piecesOnTheBoard.remove(attackedPiece);
+        }
+
+        return attackedPiece;
     }
 
     private void validateSourcePosition(Position position) {
@@ -186,8 +196,16 @@ public class GameMatch {
         currentPlayer = (currentPlayer == Color.RED) ? Color.BLUE : Color.RED;
     }
 
+    public boolean isNotGameOver(){
+        List<GameTankPiece> bluePieces = piecesOnTheBoard.stream().filter(x -> x.getColor() == Color.BLUE).toList();
+        List<GameTankPiece> redPieces = piecesOnTheBoard.stream().filter(x -> x.getColor() == Color.RED).toList();
+
+        return !bluePieces.isEmpty() && !redPieces.isEmpty();
+    }
+
     private void placeNewPiece(char column, int row, GameTankPiece piece) {
         board.placePiece(piece, new GamePosition(column, row).toPosition());
+        piecesOnTheBoard.add(piece);
     }
 
     private void initialSetup() {

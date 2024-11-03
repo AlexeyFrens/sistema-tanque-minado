@@ -59,7 +59,12 @@ public class UI {
         printAttackedPieces(attacked);
         System.out.println();
         System.out.println("Turn: " + match.getTurn());
-        System.out.println("Waiting player: " + match.getCurrentPlayer());
+        if(match.isNotGameOver()) {
+            System.out.println("Waiting player: " + match.getCurrentPlayer());
+        }else{
+            System.out.println("\nEND GAME");
+            System.out.println("Winner: " + match.getCurrentPlayer());
+        }
     }
 
     public static void printBoard(GameTankPiece[][] pieces) {
