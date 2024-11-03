@@ -1,11 +1,10 @@
 package org.example.application;
 
 import org.example.game.*;
+import org.example.game.exceptions.GameException;
+import org.example.game.exceptions.ShotException;
 
-import javax.swing.text.html.Option;
-import java.util.InputMismatchException;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -14,12 +13,14 @@ public class Main {
 
         GameMatch match = new GameMatch();
 
+        List<GameTankPiece> attacked = new ArrayList<>();
+
         // for now, it will stay true until the game logic is done
         while (true) {
 
             try {
                 UI.clearScreen();
-                UI.printMatch(match);
+                UI.printMatch(match, attacked);
                 System.out.println();
                 System.out.println("Movement Round");
                 System.out.println();
@@ -46,7 +47,7 @@ public class Main {
                     while (true) {
                         try {
                             UI.clearScreen();
-                            UI.printMatch(match);
+                            UI.printMatch(match, attacked);
                             System.out.println("\nAttack Round\n");
                             System.out.print("Source attack: ");
                             GamePosition sourceAttack = UI.readGamePosition(scanner);
@@ -59,7 +60,12 @@ public class Main {
                             System.out.print("\nTarget attack: ");
                             GamePosition targetAttack = UI.readGamePosition(scanner);
 
-                            Optional<GameTankPiece> piece = match.performGameShot(sourceAttack, targetAttack);
+                            GameTankPiece attackedPiece = match.performGameShot(sourceAttack, targetAttack);
+
+                            if(attackedPiece != null){
+                                attacked.add(attackedPiece);
+                            }
+
                             break;
                         } catch (ShotException e){
                             System.out.println(e.getMessage());
@@ -71,7 +77,7 @@ public class Main {
 
             } catch (GameException | InputMismatchException e) {
                 System.out.println(e.getMessage());
-                System.out.println("\npress enter to continue");
+                System.out.println("\nPress enter to continue");
                 scanner.nextLine();
             }
         }

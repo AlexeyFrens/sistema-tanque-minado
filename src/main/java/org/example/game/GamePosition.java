@@ -1,6 +1,7 @@
 package org.example.game;
 
 import org.example.boardGame.Position;
+import org.example.game.exceptions.GameException;
 
 public class GamePosition {
     private char column;

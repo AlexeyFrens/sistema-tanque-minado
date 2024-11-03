@@ -3,11 +3,14 @@ package org.example.game;
 import org.example.boardGame.Board;
 import org.example.boardGame.Piece;
 import org.example.boardGame.Position;
+import org.example.game.exceptions.GameException;
+import org.example.game.exceptions.ShotException;
 import org.example.game.pieces.BombPiece;
 import org.example.game.pieces.HeavyPiece;
 import org.example.game.pieces.LongReachPiece;
 
-import java.util.Optional;
+import java.util.Arrays;
+import java.util.List;
 
 public class GameMatch {
 
@@ -104,7 +107,7 @@ public class GameMatch {
         board.placePiece(p, target);
     }
 
-    public Optional<GameTankPiece> performGameShot(GamePosition sourcePosition, GamePosition targetPosition) {
+    public GameTankPiece performGameShot(GamePosition sourcePosition, GamePosition targetPosition) {
         try {
             Position source = sourcePosition.toPosition();
             Position target = targetPosition.toPosition();
@@ -115,7 +118,7 @@ public class GameMatch {
 
             nextTurn();
 
-            return Optional.of((GameTankPiece) attackedPiece);
+            return (GameTankPiece) attackedPiece;
         } catch (Exception e) {
             throw new ShotException(e.getMessage());
         }

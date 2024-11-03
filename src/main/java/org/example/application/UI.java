@@ -53,8 +53,10 @@ public class UI {
         }
     }
 
-    public static void printMatch(GameMatch match){
+    public static void printMatch(GameMatch match, List<GameTankPiece> attacked){
         printBoard(match.getPieces());
+        System.out.println();
+        printAttackedPieces(attacked);
         System.out.println();
         System.out.println("Turn: " + match.getTurn());
         System.out.println("Waiting player: " + match.getCurrentPlayer());
@@ -94,7 +96,7 @@ public class UI {
 
     public static void printPiece(GameTankPiece piece, boolean background) {
         if(background){
-            System.out.print(ANSI_CYAN_BACKGROUND);
+            System.out.print(ANSI_WHITE_BACKGROUND);
         }
         if(piece == null) {
             System.out.print("-" + ANSI_RESET);

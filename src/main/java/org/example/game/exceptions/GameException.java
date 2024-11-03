@@ -1,4 +1,4 @@
-package org.example.game;
+package org.example.game.exceptions;
 
 import org.example.boardGame.BoardException;
 
