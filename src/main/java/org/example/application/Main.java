@@ -47,6 +47,7 @@ public class Main {
                         try {
                             boolean[][] possibleShots = match.possibleShots(target);
 
+                            UI.clearScreen();
                             UI.printBoard(match.getPieces(), possibleShots);
 
                             System.out.println("\nAttack Round");
@@ -56,7 +57,7 @@ public class Main {
 
                             GameTankPiece attackedPiece = match.performGameShot(target, targetAttack);
 
-                            if(attackedPiece != null && attackedPiece.getLife() == 1){
+                            if(attackedPiece != null && attackedPiece.getLife() == 0){
                                 attacked.add(attackedPiece);
                             }
 

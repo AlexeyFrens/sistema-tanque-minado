@@ -59,7 +59,7 @@ public class UI {
     public static void printMatch(GameMatch match, List<GameTankPiece> attacked){
         printBoard(match.getPieces());
         System.out.println();
-        printPiecesLife(match.getGamePieces());
+        organizeLifePrint(match.getGamePieces());
         System.out.println();
         printAttackedPieces(attacked);
         System.out.println();
@@ -138,27 +138,27 @@ public class UI {
 
     }
 
-    private static void printPiecesLife(List<GameTankPiece> pieces){
+    private static void organizeLifePrint(List<GameTankPiece> pieces){
         List<GameTankPiece> red = pieces.stream().filter(x -> x.getColor() == Color.RED).toList();
         List<GameTankPiece> blue = pieces.stream().filter(x -> x.getColor() == Color.BLUE).toList();
 
         System.out.println("Tanks life:");
         System.out.print("Red pieces: ");
-        for(GameTankPiece p : red){
-            if(p instanceof BombPiece){
-                System.out.print("Bomb - " + p.getLife() + " ");
-            }else if(p instanceof HeavyPiece){
-                System.out.print("Heavy - " + p.getLife() + " ");
-            }else if(p instanceof LongReachPiece){
-                System.out.print("LongReach - " + p.getLife() + " ");
-            }
-        }
-
+        System.out.print(ANSI_RED);
+        printPiecesLife(red);
+        System.out.print(ANSI_RESET);
         System.out.println();
         System.out.println();
 
         System.out.print("Blue pieces: ");
-        for(GameTankPiece p : blue){
+        System.out.print(ANSI_BLUE);
+        printPiecesLife(blue);
+        System.out.print(ANSI_RESET);
+        System.out.println();
+    }
+
+    private static void printPiecesLife(List<GameTankPiece> pieceColor){
+        for(GameTankPiece p : pieceColor){
             if(p instanceof BombPiece){
                 System.out.print("Bomb - " + p.getLife() + " ");
             }else if(p instanceof HeavyPiece){
@@ -167,7 +167,5 @@ public class UI {
                 System.out.print("LongReach - " + p.getLife() + " ");
             }
         }
-
-        System.out.println();
     }
 }
