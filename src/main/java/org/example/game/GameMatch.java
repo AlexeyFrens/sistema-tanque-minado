@@ -19,6 +19,7 @@ public class GameMatch {
     private Board board;
 
     private List<GameTankPiece> piecesOnTheBoard = new ArrayList<>();
+    private List<GameTankPiece> gamePieces = new ArrayList<>();
 
     public GameMatch() {
         board = new Board(15, 15);
@@ -33,6 +34,10 @@ public class GameMatch {
 
     public Color getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public List<GameTankPiece> getGamePieces(){
+        return gamePieces;
     }
 
     public GameTankPiece[][] getPieces() {
@@ -129,10 +134,15 @@ public class GameMatch {
     }
 
     private Piece shoot(Position target) {
-        Piece attackedPiece = board.removePiece(target);
+        GameTankPiece attackedPiece = (GameTankPiece) board.piece(target);
 
-        if(attackedPiece != null){
+        if(attackedPiece.getLife() == 1){
+            attackedPiece = (GameTankPiece) board.removePiece(target);
+            attackedPiece.decrementLife();
+
             piecesOnTheBoard.remove(attackedPiece);
+        }else{
+            attackedPiece.decrementLife();
         }
 
         return attackedPiece;
@@ -206,6 +216,7 @@ public class GameMatch {
     private void placeNewPiece(char column, int row, GameTankPiece piece) {
         board.placePiece(piece, new GamePosition(column, row).toPosition());
         piecesOnTheBoard.add(piece);
+        gamePieces.add(piece);
     }
 
     private void initialSetup() {

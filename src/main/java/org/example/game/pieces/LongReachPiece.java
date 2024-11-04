@@ -10,6 +10,7 @@ public class LongReachPiece extends GameTankPiece {
         super(board, color);
         movementLimit = 2;
         reach = 3;
+        life = 2;
     }
 
     @Override

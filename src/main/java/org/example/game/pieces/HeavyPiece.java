@@ -11,6 +11,7 @@ public class HeavyPiece extends GameTankPiece {
         super(board, color);
         movementLimit = 3;
         reach = 2;
+        life = 3;
     }
 
     @Override

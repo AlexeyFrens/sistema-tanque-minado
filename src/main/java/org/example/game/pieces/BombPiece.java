@@ -10,6 +10,7 @@ public class BombPiece extends GameTankPiece {
         super(board, color);
         movementLimit = 1;
         reach = 4;
+        life = 1;
     }
 
     @Override

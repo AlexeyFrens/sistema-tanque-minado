@@ -23,6 +23,14 @@ public abstract class GameTankPiece extends Piece {
         return color;
     }
 
+    public int getLife(){
+        return life;
+    }
+
+    public void decrementLife(){
+        life--;
+    }
+
     protected boolean isThereOpponentPiece(Position position){
         if(!getBoard().positionExists(position)){
             return false;

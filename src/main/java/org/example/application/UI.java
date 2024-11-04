@@ -4,6 +4,9 @@ import org.example.game.Color;
 import org.example.game.GameMatch;
 import org.example.game.GamePosition;
 import org.example.game.GameTankPiece;
+import org.example.game.pieces.BombPiece;
+import org.example.game.pieces.HeavyPiece;
+import org.example.game.pieces.LongReachPiece;
 
 import java.util.Arrays;
 import java.util.InputMismatchException;
@@ -56,6 +59,8 @@ public class UI {
     public static void printMatch(GameMatch match, List<GameTankPiece> attacked){
         printBoard(match.getPieces());
         System.out.println();
+        printPiecesLife(match.getGamePieces());
+        System.out.println();
         printAttackedPieces(attacked);
         System.out.println();
         System.out.println("Turn: " + match.getTurn());
@@ -82,6 +87,7 @@ public class UI {
         }
         System.out.println("   a b c d e f g h i j k l m n o");
     }
+
 
     public static void printBoard(GameTankPiece[][] pieces, boolean[][] possibilities) {
         for(int i = 0; i < pieces.length; i++) {
@@ -130,5 +136,38 @@ public class UI {
         System.out.println(Arrays.toString(blue.toArray()));
         System.out.print(ANSI_RESET);
 
+    }
+
+    private static void printPiecesLife(List<GameTankPiece> pieces){
+        List<GameTankPiece> red = pieces.stream().filter(x -> x.getColor() == Color.RED).toList();
+        List<GameTankPiece> blue = pieces.stream().filter(x -> x.getColor() == Color.BLUE).toList();
+
+        System.out.println("Tanks life:");
+        System.out.print("Red pieces: ");
+        for(GameTankPiece p : red){
+            if(p instanceof BombPiece){
+                System.out.print("Bomb - " + p.getLife() + " ");
+            }else if(p instanceof HeavyPiece){
+                System.out.print("Heavy - " + p.getLife() + " ");
+            }else if(p instanceof LongReachPiece){
+                System.out.print("LongReach - " + p.getLife() + " ");
+            }
+        }
+
+        System.out.println();
+        System.out.println();
+
+        System.out.print("Blue pieces: ");
+        for(GameTankPiece p : blue){
+            if(p instanceof BombPiece){
+                System.out.print("Bomb - " + p.getLife() + " ");
+            }else if(p instanceof HeavyPiece){
+                System.out.print("Heavy - " + p.getLife() + " ");
+            }else if(p instanceof LongReachPiece){
+                System.out.print("LongReach - " + p.getLife() + " ");
+            }
+        }
+
+        System.out.println();
     }
 }

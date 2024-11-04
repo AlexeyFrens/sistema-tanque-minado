@@ -56,7 +56,7 @@ public class Main {
 
                             GameTankPiece attackedPiece = match.performGameShot(target, targetAttack);
 
-                            if(attackedPiece != null){
+                            if(attackedPiece != null && attackedPiece.getLife() == 1){
                                 attacked.add(attackedPiece);
                             }
 
