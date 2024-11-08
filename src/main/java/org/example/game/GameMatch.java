@@ -36,7 +36,7 @@ public class GameMatch {
         return currentPlayer;
     }
 
-    public List<GameTankPiece> getGamePieces(){
+    public List<GameTankPiece> getGamePieces() {
         return gamePieces;
     }
 
@@ -123,7 +123,7 @@ public class GameMatch {
             validateTargetPositionToShot(source, target);
             Piece attackedPiece = shoot(target);
 
-            if(isNotGameOver()){
+            if (isNotGameOver()) {
                 nextTurn();
             }
 
@@ -136,12 +136,12 @@ public class GameMatch {
     private Piece shoot(Position target) {
         GameTankPiece attackedPiece = (GameTankPiece) board.piece(target);
 
-        if(attackedPiece.getLife() == 1){
+        if (attackedPiece.getLife() == 1) {
             attackedPiece = (GameTankPiece) board.removePiece(target);
             attackedPiece.decrementLife();
 
             piecesOnTheBoard.remove(attackedPiece);
-        }else{
+        } else {
             attackedPiece.decrementLife();
         }
 
@@ -162,13 +162,13 @@ public class GameMatch {
 
     private void validateSourcePositionToShot(Position position) {
         if (!board.thereIsAPiece(position)) {
-            throw new GameException("There is no piece on source position");
+            throw new ShotException("There is no piece on source position");
         }
         if (currentPlayer != ((GameTankPiece) board.piece(position)).getColor()) {
-            throw new GameException("The chosen piece is not yours");
+            throw new ShotException("The chosen piece is not yours");
         }
         if (!board.piece(position).isThereAnyPossibleShot()) {
-            throw new GameException("There is no opponent to attack");
+            throw new ShotException("There is no opponent to attack");
         }
     }
 
@@ -180,7 +180,7 @@ public class GameMatch {
 
     private void validateTargetPositionToShot(Position source, Position target) {
         if (!board.piece(source).possibleShot(target)) {
-            throw new GameException("The chosen piece can't shoot to target position");
+            throw new ShotException("The chosen piece can't shoot to target position");
         }
     }
 
@@ -206,7 +206,7 @@ public class GameMatch {
         currentPlayer = (currentPlayer == Color.RED) ? Color.BLUE : Color.RED;
     }
 
-    public boolean isNotGameOver(){
+    public boolean isNotGameOver() {
         List<GameTankPiece> bluePieces = piecesOnTheBoard.stream().filter(x -> x.getColor() == Color.BLUE).toList();
         List<GameTankPiece> redPieces = piecesOnTheBoard.stream().filter(x -> x.getColor() == Color.RED).toList();
 

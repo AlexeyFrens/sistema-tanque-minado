@@ -12,7 +12,6 @@ public abstract class GameTankPiece extends Piece {
 
     protected int reach;
     protected int reloadTime;
-    protected int damage;
 
     public GameTankPiece(Board board, Color color) {
         super(board);

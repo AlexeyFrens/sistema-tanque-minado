@@ -37,9 +37,6 @@ public class Main {
                 match.performGameMove(source, target);
 
                 if (!match.isThereAnyPossibleShot()) {
-                    System.out.println("No available shots for this turn. Moving to the next player's turn...");
-                    System.out.println("\nPress enter to continue");
-                    scanner.nextLine();
                     match.nextTurn();
                 } else {
 
@@ -62,7 +59,7 @@ public class Main {
                             }
 
                             break;
-                        } catch (ShotException e){
+                        } catch (ShotException | InputMismatchException e){
                             System.out.println(e.getMessage());
                             System.out.println("\nPress enter to continue");
                             scanner.nextLine();
