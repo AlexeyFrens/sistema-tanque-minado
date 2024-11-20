@@ -2,5 +2,6 @@ package org.example.game;
 
 public enum Color {
     BLUE,
-    RED;
+    RED,
+    YELLOW;
 }

@@ -1,5 +1,7 @@
 package org.example.boardGame;
 
+import org.example.game.pieces.BlockPiece;
+
 public class Board {
     private int rows;
     private int columns;

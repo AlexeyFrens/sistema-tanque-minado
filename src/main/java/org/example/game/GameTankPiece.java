@@ -3,6 +3,7 @@ package org.example.game;
 import org.example.boardGame.Board;
 import org.example.boardGame.Piece;
 import org.example.boardGame.Position;
+import org.example.game.pieces.BlockPiece;
 
 public abstract class GameTankPiece extends Piece {
     private Color color;
@@ -35,6 +36,6 @@ public abstract class GameTankPiece extends Piece {
             return false;
         }
         GameTankPiece piece = (GameTankPiece) getBoard().piece(position);
-        return piece != null && piece.getColor() != color;
+        return piece != null && piece.getColor() != color && !(piece instanceof BlockPiece);
     }
 }

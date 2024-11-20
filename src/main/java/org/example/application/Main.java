@@ -54,12 +54,12 @@ public class Main {
 
                             GameTankPiece attackedPiece = match.performGameShot(target, targetAttack);
 
-                            if(attackedPiece != null && attackedPiece.getLife() == 0){
+                            if (attackedPiece != null && attackedPiece.getLife() == 0) {
                                 attacked.add(attackedPiece);
                             }
 
                             break;
-                        } catch (ShotException | InputMismatchException e){
+                        } catch (ShotException | InputMismatchException e) {
                             System.out.println(e.getMessage());
                             System.out.println("\nPress enter to continue");
                             scanner.nextLine();

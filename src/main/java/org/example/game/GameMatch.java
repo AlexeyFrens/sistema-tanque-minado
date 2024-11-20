@@ -5,6 +5,7 @@ import org.example.boardGame.Piece;
 import org.example.boardGame.Position;
 import org.example.game.exceptions.GameException;
 import org.example.game.exceptions.ShotException;
+import org.example.game.pieces.BlockPiece;
 import org.example.game.pieces.BombPiece;
 import org.example.game.pieces.HeavyPiece;
 import org.example.game.pieces.LongReachPiece;
@@ -26,6 +27,7 @@ public class GameMatch {
         turn = 1;
         currentPlayer = Color.RED;
         initialSetup();
+        startTimeThread();
     }
 
     public int getTurn() {
@@ -82,6 +84,34 @@ public class GameMatch {
         }
 
         return mat;
+    }
+
+    private void startTimeThread() {
+        Thread timerThread = new Thread(() -> {
+            try{
+                Thread.sleep(3 * 60 * 1000);
+                refactorBoard();
+                System.out.println("Time out! Reduced battlefield");
+            }catch (InterruptedException e){
+                System.out.println("Interrupted timer");
+            }
+        });
+
+        timerThread.setDaemon(true);
+        timerThread.start();
+    }
+
+    private void refactorBoard(){
+        for(int i = 0; i < board.getRows(); i++){
+            for(int j = 0; j < board.getColumns(); j++){
+                if((i <= 2 || i >= 12) || (j <= 2 || j >= 12)){
+                    if(board.thereIsAPiece(new Position(i, j))){
+                        board.removePiece(new Position(i, j));
+                    }
+                    board.placePiece(new BlockPiece(board, Color.YELLOW), new Position(i, j));
+                }
+            }
+        }
     }
 
     public boolean[][] possibleMoves(GamePosition sourcePosition) {

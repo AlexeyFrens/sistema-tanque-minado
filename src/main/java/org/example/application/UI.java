@@ -68,7 +68,12 @@ public class UI {
             System.out.println("Waiting player: " + match.getCurrentPlayer());
         }else{
             System.out.println("\nEND GAME");
-            System.out.println("Winner: " + match.getCurrentPlayer());
+            if(match.getCurrentPlayer() == Color.BLUE){
+                System.out.println("Winner: " + ANSI_BLUE + match.getCurrentPlayer() + ANSI_RESET);
+            }else{
+                System.out.println("Winner: " + ANSI_RED + match.getCurrentPlayer() + ANSI_RESET);
+            }
+
         }
     }
 
@@ -114,8 +119,10 @@ public class UI {
         }else{
             if(piece.getColor() == Color.BLUE){
                 System.out.print(ANSI_BLUE + piece + ANSI_RESET);
-            }else{
+            }else if(piece.getColor() == Color.RED){
                 System.out.print(ANSI_RED + piece + ANSI_RESET);
+            }else{
+                System.out.print(ANSI_YELLOW + piece + ANSI_RESET);
             }
         }
         System.out.print(" ");
