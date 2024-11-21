@@ -12,12 +12,14 @@ import org.example.game.pieces.LongReachPiece;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GameMatch {
 
     private int turn;
     private Color currentPlayer;
     private Board board;
+    private volatile boolean timeOut = false;
 
     private List<GameTankPiece> piecesOnTheBoard = new ArrayList<>();
     private List<GameTankPiece> gamePieces = new ArrayList<>();
@@ -91,6 +93,7 @@ public class GameMatch {
             try{
                 Thread.sleep(3 * 60 * 1000);
                 refactorBoard();
+                timeOut = true;
                 System.out.println("Time out! Reduced battlefield");
             }catch (InterruptedException e){
                 System.out.println("Interrupted timer");
@@ -102,16 +105,24 @@ public class GameMatch {
     }
 
     private void refactorBoard(){
+
+        GameTankPiece piece;
+
         for(int i = 0; i < board.getRows(); i++){
             for(int j = 0; j < board.getColumns(); j++){
                 if((i <= 2 || i >= 12) || (j <= 2 || j >= 12)){
                     if(board.thereIsAPiece(new Position(i, j))){
-                        board.removePiece(new Position(i, j));
+                        piece = (GameTankPiece) board.removePiece(new Position(i, j));
+                        piecesOnTheBoard.remove(piece);
                     }
                     board.placePiece(new BlockPiece(board, Color.YELLOW), new Position(i, j));
                 }
             }
         }
+    }
+
+    public boolean isTimeOut() {
+        return timeOut;
     }
 
     public boolean[][] possibleMoves(GamePosition sourcePosition) {
@@ -243,6 +254,19 @@ public class GameMatch {
         return !bluePieces.isEmpty() && !redPieces.isEmpty();
     }
 
+    public Color winnerGame(){
+        List<GameTankPiece> bluePieces = piecesOnTheBoard.stream().filter(x -> x.getColor() == Color.BLUE).toList();
+        List<GameTankPiece> redPieces = piecesOnTheBoard.stream().filter(x -> x.getColor() == Color.RED).toList();
+
+        if(bluePieces.isEmpty() && redPieces.isEmpty()){
+            return Color.YELLOW;
+        }else if(bluePieces.isEmpty()){
+            return Color.RED;
+        }else{
+            return Color.BLUE;
+        }
+    }
+
     private void placeNewPiece(char column, int row, GameTankPiece piece) {
         board.placePiece(piece, new GamePosition(column, row).toPosition());
         piecesOnTheBoard.add(piece);
@@ -250,12 +274,26 @@ public class GameMatch {
     }
 
     private void initialSetup() {
-        placeNewPiece('d', 1, new BombPiece(board, Color.RED));
-        placeNewPiece('h', 1, new HeavyPiece(board, Color.RED));
-        placeNewPiece('l', 1, new LongReachPiece(board, Color.RED));
 
-        placeNewPiece('d', 15, new BombPiece(board, Color.BLUE));
-        placeNewPiece('h', 15, new HeavyPiece(board, Color.BLUE));
-        placeNewPiece('l', 15, new LongReachPiece(board, Color.BLUE));
+        Random random = new Random();
+
+        placeNewPiece('d', 1, generateRandomPiece(Color.RED, random));
+        placeNewPiece('h', 1, generateRandomPiece(Color.RED, random));
+        placeNewPiece('l', 1, generateRandomPiece(Color.RED, random));
+
+        placeNewPiece('d', 15, generateRandomPiece(Color.BLUE, random));
+        placeNewPiece('h', 15, generateRandomPiece(Color.BLUE, random));
+        placeNewPiece('l', 15, generateRandomPiece(Color.BLUE, random));
+    }
+
+    private GameTankPiece generateRandomPiece(Color color, Random random) {
+        int pieceType = random.nextInt(3);
+
+        return switch (pieceType) {
+            case 0 -> new BombPiece(board, color);
+            case 1 -> new HeavyPiece(board, color);
+            case 2 -> new LongReachPiece(board, color);
+            default -> throw new IllegalStateException("Valor inesperado: " + pieceType);
+        };
     }
 }

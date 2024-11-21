@@ -17,6 +17,11 @@ public class Main {
 
         while (match.isNotGameOver()) {
 
+            if (match.isTimeOut()) {
+                System.out.println("Time out! The game has ended.");
+                break;
+            }
+
             try {
                 UI.clearScreen();
                 UI.printMatch(match, attacked);
@@ -25,6 +30,11 @@ public class Main {
                 System.out.println();
                 System.out.print("Source: ");
                 GamePosition source = UI.readGamePosition(scanner);
+
+                if (match.isTimeOut()) {
+                    System.out.println("Time out! The game has ended.");
+                    break;
+                }
 
                 boolean[][] possibleMoves = match.possibleMoves(source);
                 UI.clearScreen();
@@ -41,6 +51,12 @@ public class Main {
                 } else {
 
                     while (true) {
+
+                        if (match.isTimeOut()) {
+                            System.out.println("Time out! The game has ended.");
+                            break;
+                        }
+
                         try {
                             boolean[][] possibleShots = match.possibleShots(target);
 
@@ -60,6 +76,11 @@ public class Main {
 
                             break;
                         } catch (ShotException | InputMismatchException e) {
+                            if (match.isTimeOut()) {
+                                System.out.println("Time out! The game has ended.");
+                                break;
+                            }
+
                             System.out.println(e.getMessage());
                             System.out.println("\nPress enter to continue");
                             scanner.nextLine();
@@ -68,6 +89,12 @@ public class Main {
                 }
 
             } catch (GameException | InputMismatchException e) {
+
+                if (match.isTimeOut()) {
+                    System.out.println("Time out! The game has ended.");
+                    break;
+                }
+
                 System.out.println(e.getMessage());
                 System.out.println("\nPress enter to continue");
                 scanner.nextLine();
