@@ -17,9 +17,9 @@ public class Main {
 
         while (match.isNotGameOver()) {
 
-            if (match.isTimeOut()) {
-                System.out.println("Time out! The game has ended.");
-                break;
+            if (match.isTimeOut() && !match.isBoardReduced()) {
+                match.reduceBoard();
+                continue;
             }
 
             try {
@@ -30,11 +30,6 @@ public class Main {
                 System.out.println();
                 System.out.print("Source: ");
                 GamePosition source = UI.readGamePosition(scanner);
-
-                if (match.isTimeOut()) {
-                    System.out.println("Time out! The game has ended.");
-                    break;
-                }
 
                 boolean[][] possibleMoves = match.possibleMoves(source);
                 UI.clearScreen();
@@ -52,8 +47,8 @@ public class Main {
 
                     while (true) {
 
-                        if (match.isTimeOut()) {
-                            System.out.println("Time out! The game has ended.");
+                        if (match.isTimeOut() && !match.isBoardReduced()) {
+                            match.reduceBoard();
                             break;
                         }
 
@@ -76,9 +71,10 @@ public class Main {
 
                             break;
                         } catch (ShotException | InputMismatchException e) {
-                            if (match.isTimeOut()) {
-                                System.out.println("Time out! The game has ended.");
-                                break;
+
+                            if (match.isTimeOut() && !match.isBoardReduced()) {
+                                match.reduceBoard();
+                                continue;
                             }
 
                             System.out.println(e.getMessage());
@@ -90,9 +86,9 @@ public class Main {
 
             } catch (GameException | InputMismatchException e) {
 
-                if (match.isTimeOut()) {
-                    System.out.println("Time out! The game has ended.");
-                    break;
+                if (match.isTimeOut() && !match.isBoardReduced()) {
+                    match.reduceBoard();
+                    continue;
                 }
 
                 System.out.println(e.getMessage());
