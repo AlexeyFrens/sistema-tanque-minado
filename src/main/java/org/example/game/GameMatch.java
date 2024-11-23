@@ -20,6 +20,7 @@ public class GameMatch {
     private Color currentPlayer;
     private Board board;
     private volatile boolean timeOut = false;
+    private boolean boardReduced = false;
 
     private List<GameTankPiece> piecesOnTheBoard = new ArrayList<>();
     private List<GameTankPiece> gamePieces = new ArrayList<>();
@@ -91,8 +92,7 @@ public class GameMatch {
     private void startTimeThread() {
         Thread timerThread = new Thread(() -> {
             try{
-                Thread.sleep(3 * 60 * 1000);
-                refactorBoard();
+                Thread.sleep(15 * 1000);
                 timeOut = true;
                 System.out.println("Time out! Reduced battlefield");
             }catch (InterruptedException e){
@@ -123,6 +123,17 @@ public class GameMatch {
 
     public boolean isTimeOut() {
         return timeOut;
+    }
+
+    public boolean isBoardReduced(){
+        return boardReduced;
+    }
+
+    public void reduceBoard(){
+        if(isBoardReduced()) return;
+
+        refactorBoard();
+        boardReduced = true;
     }
 
     public boolean[][] possibleMoves(GamePosition sourcePosition) {
