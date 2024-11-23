@@ -92,7 +92,7 @@ public class GameMatch {
     private void startTimeThread() {
         Thread timerThread = new Thread(() -> {
             try{
-                Thread.sleep(15 * 1000);
+                Thread.sleep(3 * 60 * 1000);
                 timeOut = true;
                 System.out.println("Time out! Reduced battlefield");
             }catch (InterruptedException e){
